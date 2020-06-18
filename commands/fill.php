@@ -1,11 +1,12 @@
 <?php
+
+use App\Connection;
+
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $faker = Faker\Factory::create();
 
-$pdo = new PDO('mysql:dbname=blog;host=mysql', 'laradock', 'laradock', [
-  PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-]);
+$pdo = Connection::getPDO();
 
 $pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
 $pdo->exec('TRUNCATE TABLE post_category');

@@ -1,25 +1,14 @@
 <?php
 
+use App\Connection;
 use App\Model\Post;
+use App\URL;
 
 $title = 'My Blog';
 
-$pdo = new PDO('mysql:dbname=blog;host=mysql', 'laradock', 'laradock', [
-  PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-]);
+$pdo = Connection::getPDO();
 
-$page = $_GET['page'] ?? 1;
-
-if (!filter_var($page, FILTER_VALIDATE_INT)) {
-  throw new Exception('Invalid number page!');
-}
-if ($page === '1') {
-  header('Location: ' . $router->url('home'));
-  http_response_code(301);
-  exit();
-}
-
-$currentPage = (int) $page;
+$currentPage = URL::getPositiveInt('page', 1);
 if ($currentPage <= 0) {
   throw new Exception('Invalid page');
 }
