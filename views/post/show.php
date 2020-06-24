@@ -32,6 +32,7 @@ $query = $pdo->prepare('
 $query->setFetchMode(PDO::FETCH_CLASS, Category::class);
 $query->execute(['id' => $post->getID()]);
 $categories = $query->fetchAll();
+
 $title = "Post";
 ?>
 

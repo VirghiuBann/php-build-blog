@@ -1,6 +1,7 @@
 <?php
 
 use App\Connection;
+use App\Model\Category;
 use App\Model\Post;
 use App\PaginateQuery;
 
@@ -13,6 +14,24 @@ $paginationQuery = new PaginateQuery(
     "SELECT COUNT(*) FROM  post"
 );
 $posts = $paginationQuery->getItems(Post::class);
+$postsByID = [];
+foreach ($posts as $post) {
+    $postsByID[$post->getID()] = $post;
+}
+// dd($posts);
+// dd($postsByID);
+$categories = $pdo->query(
+    'SELECT c.*, pc.post_id
+    FROM post_category pc
+    JOIN category c ON c.id = pc.category_id
+    WHERE pc.post_id IN (' . implode(',', array_keys($postsByID)) . ')'
+)->fetchAll(PDO::FETCH_CLASS, Category::class);
+// dd($categories);
+foreach ($categories as $category) {
+    $postsByID[$category->getPostID()]->categories[] = $category;
+    // dd($postsByID);
+}
+
 $link = $router->url('home');
 ?>
 
