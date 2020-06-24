@@ -28,10 +28,10 @@ $categories = $pdo->query(
 )->fetchAll(PDO::FETCH_CLASS, Category::class);
 // dd($categories);
 foreach ($categories as $category) {
-    $postsByID[$category->getPostID()]->categories[] = $category;
+    $postsByID[$category->getPostID()]->addCategory($category);
     // dd($postsByID);
 }
-
+//dd($posts);
 $link = $router->url('home');
 ?>
 

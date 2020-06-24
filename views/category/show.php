@@ -35,11 +35,23 @@ $paginationQuery = new PaginateQuery(
             FROM post_category
             WHERE category_id = {$category->getID()}"
 );
+/** @var Post[] */
 $posts = $paginationQuery->getItems(Post::class);
-$posts = $paginationQuery->getItems(Post::class);
-$posts = $paginationQuery->getItems(Post::class);
-$posts = $paginationQuery->getItems(Post::class);
-///dd($posts);
+
+$postsByID = [];
+foreach ($posts as $post) {
+    $postsByID[$post->getID()] = $post;
+}
+$categories = $pdo->query(
+    'SELECT c.*, pc.post_id
+    FROM post_category pc
+    JOIN category c ON c.id = pc.category_id
+    WHERE pc.post_id IN (' . implode(',', array_keys($postsByID)) . ')'
+)->fetchAll(PDO::FETCH_CLASS, Category::class);
+foreach ($categories as $category) {
+    $postsByID[$category->getPostID()]->addCategory($category);
+}
+
 $link = $router->url('category', [
     'id' => $category->getID(),
     'slug' => $category->getSlug()
