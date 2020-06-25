@@ -10,6 +10,15 @@ final class PostTable extends Table
     protected $table = "post";
     protected $class = Post::class;
 
+    public function delete(int $id): void
+    {
+        $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = ?");
+        $ok = $query->execute([$id]);
+        if ($ok === false) {
+            throw new \Exception("This post $id cannot be removed from the {$this->table}.");
+        }
+    }
+
     public function findPaginated()
     {
         $paginatedQuery = new PaginateQuery(

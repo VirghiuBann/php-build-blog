@@ -61,7 +61,7 @@ HTML;
         if ($currentPage >= $pages) return null;
         $link .= "?page=" . ($currentPage + 1);
         return <<<HTML
-        <a href="{$link}" class="btn btn-primary ml-auto">Prev</a>
+        <a href="{$link}" class="btn btn-primary ml-auto">Next</a>
 HTML;
     }
 
