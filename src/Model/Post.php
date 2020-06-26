@@ -19,6 +19,11 @@ class Post
         return $this->name;
     }
 
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
     public function getFormattedContent(): ?string
     {
         return nl2br(e($this->content));

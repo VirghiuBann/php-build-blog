@@ -26,6 +26,7 @@ $router
     ->get('/blog/[*:slug]-[i:id]', '/post/show', 'post')
     ->get('/admin', '/admin/post/index', 'admin_posts')
     ->get('/admin/post/[i:id]', '/admin/post/edit', 'admin_post_edit')
+    ->post('/admin/post/[i:id]', '/admin/post/edit', 'admin_update')
     ->get('/admin/post/create', '/admin/post/create', 'admin_post_create')
     ->post('/admin/post/[i:id]/delete', '/admin/post/delete', 'admin_post_delete')
     ->run();

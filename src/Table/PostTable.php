@@ -2,13 +2,26 @@
 
 namespace App\Table;
 
-use App\PaginateQuery;
 use App\Model\Post;
+use App\PaginateQuery;
 
 final class PostTable extends Table
 {
     protected $table = "post";
     protected $class = Post::class;
+
+    public function update(Post $post): void
+    {
+        $query = $this->pdo->prepare("UPDATE {$this->table} SET name = :name WHERE id = :id");
+        $ok = $query->execute([
+            'id' => $post->getID(),
+            'name' => $post->getName(),
+        ]);
+        if ($ok === false) {
+            throw new \Exception("This post {$post->getID()} cannot be updated from the {$this->table}.");
+        }
+
+    }
 
     public function delete(int $id): void
     {
@@ -34,12 +47,12 @@ final class PostTable extends Table
     public function findPaginateForCategory(int $categoryID)
     {
         $paginatedQuery = new PaginateQuery(
-            "SELECT p.* 
+            "SELECT p.*
             FROM post p
             JOIN post_category pc ON pc.post_id = p.id
             WHERE pc.category_id = {$categoryID}
             ORDER BY created_at DESC",
-            "SELECT COUNT(*) 
+            "SELECT COUNT(*)
             FROM post_category
             WHERE category_id = {$categoryID}"
         );
